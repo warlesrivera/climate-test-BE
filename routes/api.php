@@ -1,7 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\HeadquarterController;
+use App\Http\Controllers\WelcomeUserController;
+use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\Authentication\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +18,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [LoginController::class, 'login']);
+});
+
+Route::group(['prefix' => 'users'], function () {
+    Route::post('/create', [UserController::class, 'store']);
+});
+
+Route::group(["middleware" => ['auth:api']], function () {
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
+
+    Route::group(['prefix' => 'welcomeuser'], function () {
+        Route::get('/', [WelcomeUserController::class, 'index']);
+        Route::post('/update/{welcomeUser}', [WelcomeUserController::class, 'update']);
+        Route::post('/delete/{welcomeUser}', [WelcomeUserController::class, 'destroy']);
+        Route::get('/get/{welcomeUser}', [WelcomeUserController::class, 'show']);
+    });
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::get('/get/{user}', [UserController::class, 'show']);
+        Route::post('/update/{user}', [UserController::class, 'update']);
+        Route::post('/delete/{id}', [UserController::class, 'destroy']);
+    });
 });
