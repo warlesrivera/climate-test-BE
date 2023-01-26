@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\HeadquarterController;
-use App\Http\Controllers\WelcomeUserController;
 use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Authentication\AuthController;
 
@@ -32,13 +30,6 @@ Route::group(["middleware" => ['auth:api']], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('logout', [AuthController::class, 'logout']);
-    });
-
-    Route::group(['prefix' => 'welcomeuser'], function () {
-        Route::get('/', [WelcomeUserController::class, 'index']);
-        Route::post('/update/{welcomeUser}', [WelcomeUserController::class, 'update']);
-        Route::post('/delete/{welcomeUser}', [WelcomeUserController::class, 'destroy']);
-        Route::get('/get/{welcomeUser}', [WelcomeUserController::class, 'show']);
     });
 
     Route::group(['prefix' => 'users'], function () {
