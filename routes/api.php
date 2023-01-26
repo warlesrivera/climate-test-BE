@@ -23,6 +23,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'users'], function () {
     Route::post('/create', [UserController::class, 'store']);
+
 });
 
 Route::group(["middleware" => ['auth:api']], function () {
@@ -33,9 +34,10 @@ Route::group(["middleware" => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', [UserController::class, 'index']);
         Route::get('/get/{user}', [UserController::class, 'show']);
         Route::post('/update/{user}', [UserController::class, 'update']);
         Route::post('/delete/{id}', [UserController::class, 'destroy']);
+        Route::get('/', [UserController::class, 'index']);
+
     });
 });
