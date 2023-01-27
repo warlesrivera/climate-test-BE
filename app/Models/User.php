@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\MapHistory;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+
+    public function histories()
+    {
+        return $this->hasMany(MapHistory::class);
+    }
 
 
 }

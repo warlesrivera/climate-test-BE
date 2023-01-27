@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Models\Alerts;
-use App\Models\Wather;
+use App\Models\Weather;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MapHistory extends Model
 {
     use HasFactory;
+    const API_KEY = 'e0747514d5f27693d0331f725e844e45';
+    const URL = 'https://api.openweathermap.org/data/3.0/onecall';
 
     protected $fillable = [
         'humidity',
@@ -18,8 +20,10 @@ class MapHistory extends Model
         'user_id'
     ];
 
+
     protected $casts = [
-        'alerts' => Alerts::class,
-        'weather' => Wather::class
+        'alerts' => 'array',
+        'weather'=>'array'
     ];
+
 }

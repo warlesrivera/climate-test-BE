@@ -10,9 +10,9 @@ class initWeb extends Command
 
     private $dataCities = [
 
-        ['name' => 'Miami', 'lat' => '25.761681', 'long' => ' -80.191788'],
+        ['name' => 'New York', 'lat' => '25.761681', 'long' => '-80.191788'],
         ['name' => 'Orlando Florida', 'lat' => '28.538336', 'long' => '-81.379234'],
-        ['name' => 'New York', 'lat' => '43.000000', 'long' => '-75.000000']
+        ['name' => 'Miami', 'lat' => '43.000000', 'long' => '-75.000000']
 
     ];
     /**

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CitiesController;
+use App\Http\Controllers\MapHistoryController;
 use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\Authentication\LoginController;
 
@@ -43,8 +44,10 @@ Route::group(["middleware" => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'cities'], function () {
-
         Route::get('/', [CitiesController::class, 'cities']);
-
+    });
+    Route::group(['prefix' => 'map'], function () {
+        Route::get('/', [MapHistoryController::class, 'index']);
+        Route::get('/history/{id}', [MapHistoryController::class, 'history']);
     });
 });

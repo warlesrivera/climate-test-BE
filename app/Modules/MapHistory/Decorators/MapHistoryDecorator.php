@@ -2,34 +2,41 @@
 
 namespace App\Modules\MapHistory\Decorators;
 
+use Http;
 use App\Models\MapHistory;
-use App\Models\Headquarter;
+use App\Modules\City\Repositories\CityRepository;
 use Illuminate\Support\Facades\Log;
-use App\Modules\MapHistory\Request\MapHistoryRequest;
 use App\Modules\MapHistory\Interfaces\IMapHistoryDecorator;
 use App\Modules\MapHistory\Repositories\MapHistoryRepository;
-use Http;
 
 class MapHistoryDecorator implements IMapHistoryDecorator
 {
-    protected $_MapHistoryRepository;
-    private const API_KEY = 'e0747514d5f27693d0331f725e844e45';
-    private const URL = 'https://api.openweathermap.org/data/3.0/onecall';
+    protected $_mapHistoryRepository;
+    protected $_cityRepository;
 
-    public function __construct(MapHistoryRepository $MapHistoryRepository)
+
+    public function __construct(MapHistoryRepository $MapHistoryRepository, CityRepository $cityRepository)
     {
-        $this->_MapHistoryRepository = $MapHistoryRepository;
+        $this->_mapHistoryRepository = $MapHistoryRepository;
+        $this->_cityRepository = $cityRepository;
     }
 
     public function All()
     {
         try
         {
-            $MapHistorys = $this->_MapHistoryRepository->All();
+            $cities = $this->_cityRepository->All();
+            $histories = array();
+            foreach ($cities as $key => $city) {
+                $data = $this->getApiHumidity($city->lat,$city->long);
+                $this->InsertMapHistory($data);
+                array_push($histories, $data);
+            }
+
             return  [
                 'success' => true,
                 'code' => 200,
-                'data' => $MapHistorys
+                'data' => collect($histories)
             ];
         }
         catch (\Illuminate\Database\QueryException $e)
@@ -54,16 +61,8 @@ class MapHistoryDecorator implements IMapHistoryDecorator
     {
         try
         {
-            $message = __('validation.update', ['attributes' => __('validation.attributes.MapHistory')]);
-
-
-            $this->_MapHistoryRepository->save($mapHistory);
-            return  [
-                'success' => true,
-                'code' => 200,
-                'data' =>['message' => $message]
-
-            ];
+            $data = $this->_mapHistoryRepository->save($mapHistory);
+            return   $data;
         }
         catch (\Illuminate\Database\QueryException $e)
         {
@@ -81,11 +80,11 @@ class MapHistoryDecorator implements IMapHistoryDecorator
             ];
         }
     }
-    public function Get(int $id)
+    public function history(int $id)
     {
         try
         {
-            $MapHistory = $this->_MapHistoryRepository->get($id);
+            $MapHistory = $this->_mapHistoryRepository->historyUser($id);
             return  [
                 'success' => true,
                 'code' => 200,
@@ -113,10 +112,19 @@ class MapHistoryDecorator implements IMapHistoryDecorator
 
     private function getApiHumidity ($lat, $long)
     {
-        $url ="{URL}?lon={$long}&appid={API_KEY}&last={$lat}";
-        $apiReq = Http::get($url);
+        $map = new MapHistory();
+        $url = $map::URL;
+        $key =$map::API_KEY;
+
+        $endpoint ="{$url}?lon={$long}&appid={$key}&lat={$lat}";
+        $apiReq = Http::get($endpoint);
         $apiRes = $apiReq->json();
-        dd($apiRes);
+
+        $map->humidity = $apiRes['current']['humidity'];
+        $map->alerts =isset($apiRes['alerts'])??$apiRes['alerts'];
+        $map->weather =$apiRes['current']['weather'];
+        $map->user_id =auth()->id();
+        return $map;
     }
 
 }

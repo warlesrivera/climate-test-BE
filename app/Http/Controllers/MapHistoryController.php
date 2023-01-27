@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Modules\MapHistory\Interfaces\IMapHistoryDecorator;
 
 class MapHistoryController extends ApiController
 {
+
+    protected $_mapHistoryDecorator;
+
+
+    public function __construct(IMapHistoryDecorator $mapHistoryDecorator)
+    {
+        $this->_mapHistoryDecorator = $mapHistoryDecorator;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +21,18 @@ class MapHistoryController extends ApiController
      */
     public function index()
     {
-        //
+        try {
+            $data = $this->_mapHistoryDecorator->all() ;
+            return  $data['success']
+            ? $this->showAll($data['data'], $data['code'])
+            : $this->errorResponse($data['data']['message'], $data['code']);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            Log::error($ex->getMessage());
+            throw new \Exception(__('validation.server.500'));
+        } catch (Exception $e) {
+            Log::error($e->getMessage() . ' Line: ' . $e->getLine() . ' File: ' . $e->getFile());
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
     /**
      * Display the specified resource.
@@ -21,9 +40,20 @@ class MapHistoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function history(int $id)
     {
-        //
+        try {
+            $data = $this->_mapHistoryDecorator->history($id) ;
+            return  $data['success']
+            ? $this->showAll($data['data'], $data['code'])
+            : $this->errorResponse($data['data']['message'], $data['code']);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            Log::error($ex->getMessage());
+            throw new \Exception(__('validation.server.500'));
+        } catch (Exception $e) {
+            Log::error($e->getMessage() . ' Line: ' . $e->getLine() . ' File: ' . $e->getFile());
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
 }
