@@ -20,7 +20,11 @@ class MapHistoryRepository extends BaseRepository
     public function historyUser(int  $id)
     {
         $user = $this->_userRepository->get($id);
+        $histories= $user->histories;
+        foreach ($histories as $key => $value) {
 
-        return $user->histories;
+            $value->city= $value->city;
+        }
+        return $histories;
     }
 }

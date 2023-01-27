@@ -28,7 +28,7 @@ class MapHistoryDecorator implements IMapHistoryDecorator
             $cities = $this->_cityRepository->All();
             $histories = array();
             foreach ($cities as $key => $city) {
-                $data = $this->getApiHumidity($city->lat,$city->long);
+                $data = $this->getApiHumidity($city->lat,$city->long, $city->id);
                 $this->InsertMapHistory($data);
                 array_push($histories, $data);
             }
@@ -85,6 +85,7 @@ class MapHistoryDecorator implements IMapHistoryDecorator
         try
         {
             $MapHistory = $this->_mapHistoryRepository->historyUser($id);
+
             return  [
                 'success' => true,
                 'code' => 200,
@@ -110,7 +111,7 @@ class MapHistoryDecorator implements IMapHistoryDecorator
         }
     }
 
-    private function getApiHumidity ($lat, $long)
+    private function getApiHumidity ($lat, $long, $idCity)
     {
         $map = new MapHistory();
         $url = $map::URL;
@@ -124,6 +125,7 @@ class MapHistoryDecorator implements IMapHistoryDecorator
         $map->alerts =isset($apiRes['alerts'])??$apiRes['alerts'];
         $map->weather =$apiRes['current']['weather'];
         $map->user_id =auth()->id();
+        $map->city_id =$idCity;
         return $map;
     }
 

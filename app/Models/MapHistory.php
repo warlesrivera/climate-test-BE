@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alerts;
-use App\Models\Weather;
+use App\Models\City;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,7 +16,8 @@ class MapHistory extends Model
         'humidity',
         'alerts',
         'weather',
-        'user_id'
+        'user_id',
+        'city_id'
     ];
 
 
@@ -25,5 +25,10 @@ class MapHistory extends Model
         'alerts' => 'array',
         'weather'=>'array'
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
 }

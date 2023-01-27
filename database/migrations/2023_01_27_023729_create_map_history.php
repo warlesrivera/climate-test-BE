@@ -20,8 +20,9 @@ class CreateMapHistory extends Migration
             $table->text('alerts');
             $table->text('weather');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('city_id');
             $table->timestamps();
-
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 

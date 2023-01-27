@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Modules\MapHistory\Interfaces\IMapHistoryDecorator;
 
 class MapHistoryController extends ApiController
@@ -44,6 +45,7 @@ class MapHistoryController extends ApiController
     {
         try {
             $data = $this->_mapHistoryDecorator->history($id) ;
+
             return  $data['success']
             ? $this->showAll($data['data'], $data['code'])
             : $this->errorResponse($data['data']['message'], $data['code']);
