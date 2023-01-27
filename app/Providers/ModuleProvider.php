@@ -15,8 +15,8 @@ class ModuleProvider extends ServiceProvider
     {
         $modules = [
             'User',
-            'Login'
-
+            'Login',
+            'MapHistory'
         ];
 
         foreach ($modules as $module) {
