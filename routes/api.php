@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\Authentication\AuthController;
+use App\Http\Controllers\Authentication\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,12 @@ Route::group(["middleware" => ['auth:api']], function () {
         Route::post('/update/{user}', [UserController::class, 'update']);
         Route::post('/delete/{id}', [UserController::class, 'destroy']);
         Route::get('/', [UserController::class, 'index']);
+
+    });
+
+    Route::group(['prefix' => 'cities'], function () {
+
+        Route::get('/', [CitiesController::class, 'cities']);
 
     });
 });

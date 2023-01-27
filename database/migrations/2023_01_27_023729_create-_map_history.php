@@ -13,7 +13,19 @@ class CreateMapHistory extends Migration
      */
     public function up()
     {
-        //
+
+        Schema::create('map_histories', function (Blueprint $table) {
+            $table->id();
+            $table->text('humidity');
+            $table->text('alerts');
+            $table->text('weather');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+
     }
 
     /**

@@ -14,7 +14,8 @@ class MapHistory extends Model
     protected $fillable = [
         'humidity',
         'alerts',
-        'weather'
+        'weather',
+        'user_id'
     ];
 
     protected $casts = [

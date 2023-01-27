@@ -3,7 +3,6 @@
 namespace App\Modules\User\Decorators;
 
 use App\Models\User;
-use App\Models\Headquarter;
 use Illuminate\Support\Facades\Log;
 use App\Modules\User\Request\UserRequest;
 use App\Modules\User\Interfaces\IUserDecorator;
@@ -57,7 +56,6 @@ class UserDecorator implements IUserDecorator
             if ($user == null) {
 
                 $user = new User($request->all());
-                $user->headquarter_id = Headquarter::first()->id;
                 $user->password = Hash::make($user->password);
                 $message =__('validation.success', ['attributes' => __('validation.attributes.user') ]);
             }
