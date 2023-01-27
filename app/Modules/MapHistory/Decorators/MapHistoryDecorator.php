@@ -29,9 +29,9 @@ class MapHistoryDecorator implements IMapHistoryDecorator
             $histories = array();
             foreach ($cities as $key => $city) {
                 $data = $this->getApiHumidity($city->lat,$city->long, $city->id);
-                $history = $this->InsertMapHistory($data);
-
-                array_push($histories, $history);
+                $map = $this->InsertMapHistory($data);
+                $map->city =$city;
+                array_push($histories, $map);
             }
             return  [
                 'success' => true,
