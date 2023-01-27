@@ -17,7 +17,7 @@ class CreateMapHistory extends Migration
         Schema::create('map_histories', function (Blueprint $table) {
             $table->id();
             $table->text('humidity');
-            $table->text('alerts');
+            $table->text('alerts')->nullable();
             $table->text('weather');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('city_id');

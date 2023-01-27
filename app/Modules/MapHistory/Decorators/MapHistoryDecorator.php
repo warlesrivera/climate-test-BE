@@ -29,10 +29,10 @@ class MapHistoryDecorator implements IMapHistoryDecorator
             $histories = array();
             foreach ($cities as $key => $city) {
                 $data = $this->getApiHumidity($city->lat,$city->long, $city->id);
-                $this->InsertMapHistory($data);
-                array_push($histories, $data);
-            }
+                $history = $this->InsertMapHistory($data);
 
+                array_push($histories, $history);
+            }
             return  [
                 'success' => true,
                 'code' => 200,
@@ -122,10 +122,11 @@ class MapHistoryDecorator implements IMapHistoryDecorator
         $apiRes = $apiReq->json();
 
         $map->humidity = $apiRes['current']['humidity'];
-        $map->alerts =isset($apiRes['alerts'])??$apiRes['alerts'];
+        $map->alerts =isset($apiRes['alerts'])?$apiRes['alerts']:null;
         $map->weather =$apiRes['current']['weather'];
         $map->user_id =auth()->id();
         $map->city_id =$idCity;
+
         return $map;
     }
 
