@@ -8,5 +8,5 @@ interface IMapHistoryDecorator
 {
     public function All();
     public function InsertMapHistory( MapHistory $MapHistory = null);
-    public function history(int $id);
+    public function history(int $id, int $size);
 }

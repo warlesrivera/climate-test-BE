@@ -17,14 +17,14 @@ class MapHistoryRepository extends BaseRepository
         $this->_userRepository =$userRepository;
     }
 
-    public function historyUser(int  $id)
+    public function historyUser(int  $id,int $size)
     {
         $user = $this->_userRepository->get($id);
-        $histories= $user->histories;
+        $histories= $user->histories()->paginate($size);
         foreach ($histories as $key => $value) {
 
             $value->city= $value->city;
         }
-        return $histories;
+        return collect($histories);
     }
 }

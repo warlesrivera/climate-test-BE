@@ -41,10 +41,10 @@ class MapHistoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function history(int $id)
+    public function history(int $id, int $size)
     {
         try {
-            $data = $this->_mapHistoryDecorator->history($id) ;
+            $data = $this->_mapHistoryDecorator->history($id,$size) ;
 
             return  $data['success']
             ? $this->showAll($data['data'], $data['code'])

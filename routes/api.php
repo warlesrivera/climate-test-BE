@@ -48,6 +48,6 @@ Route::group(["middleware" => ['auth:api']], function () {
     });
     Route::group(['prefix' => 'map'], function () {
         Route::get('/', [MapHistoryController::class, 'index']);
-        Route::get('/history/{id}', [MapHistoryController::class, 'history']);
+        Route::get('/history/{id}/{size}', [MapHistoryController::class, 'history']);
     });
 });

@@ -80,11 +80,11 @@ class MapHistoryDecorator implements IMapHistoryDecorator
             ];
         }
     }
-    public function history(int $id)
+    public function history(int $id, int $size)
     {
         try
         {
-            $MapHistory = $this->_mapHistoryRepository->historyUser($id);
+            $MapHistory = $this->_mapHistoryRepository->historyUser($id, $size);
 
             return  [
                 'success' => true,
