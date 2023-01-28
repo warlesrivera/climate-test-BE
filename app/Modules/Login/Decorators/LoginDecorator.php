@@ -127,6 +127,7 @@ class LoginDecorator implements ILoginDecorator
             'code' => 200,
             'data' => [
                 'token' => $this->dataRepository->saveToken($this->user),
+                'user' =>auth()->user(),
                 'message' => __('validation.auth.login')
             ]
         ];
